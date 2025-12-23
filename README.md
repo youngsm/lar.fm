@@ -328,7 +328,7 @@ Test configurations are typically defined in the config file's `data.test` secti
 ### Output
 
 Test results are saved to:
-- `exp/{dataset}/{exp_name}/test/` - Evaluation metrics and predictions
+- `exp/{dataset}/{exp_name}/test.log` - Evaluation metrics and detailed per-class statistics
 - Console output - Summary statistics (mIoU, accuracy, etc.)
 
 ## Logging
