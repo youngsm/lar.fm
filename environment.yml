@@ -1,4 +1,4 @@
-name: larfm-torch2.5.0-cu12.4
+name: pimm-torch2.5.0-cu12.4
 channels:
   # - pytorch
   - nvidia/label/cuda-12.4.1

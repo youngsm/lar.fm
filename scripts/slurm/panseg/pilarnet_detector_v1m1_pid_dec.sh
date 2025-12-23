@@ -9,7 +9,7 @@
 #SBATCH --account=neutrino:cider-nu
 #SBATCH --partition=ampere
 #SBATCH --output=slurm_logs/%j_%n_%x_%a.txt
-#SBATCH --array=1-5
+#SBATCH --array=3
 
 set -e
 
@@ -18,7 +18,6 @@ export PYTHONFAULTHANDLER=1
 SINGULARITY_IMAGE_PATH=/sdf/group/neutrino/images/develop.sif
 
 export NCCL_SOCKET_IFNAME=^docker0,lo  # Use any interface except docker and loopback
-export NCCL_IB_DISABLE=0
 
 # Get current date and time in format YYYY-MM-DD_HH-MM
 CURRENT_DATETIME=$(date +"%Y-%m-%d_%H-%M-%S")
@@ -41,7 +40,7 @@ elif [ $SLURM_ARRAY_TASK_ID -eq 2 ]; then
     EPOCH=20000
 elif [ $SLURM_ARRAY_TASK_ID -eq 3 ]; then
     MAX_LEN=10000
-    EPOCH=2000
+    EPOCH=1
 elif [ $SLURM_ARRAY_TASK_ID -eq 4 ]; then
     MAX_LEN=100000
     EPOCH=200
@@ -50,7 +49,7 @@ elif [ $SLURM_ARRAY_TASK_ID -eq 5 ]; then
     EPOCH=20
 fi
 
-TRAIN_PATH=/sdf/home/y/youngsam/sw/dune/representations/lar.fm/scripts/train.sh
+TRAIN_PATH=/sdf/home/y/youngsam/sw/dune/representations/pimm/scripts/train.sh
 COMMAND="sh ${TRAIN_PATH} -m 2 -g 4 -d panda/panseg -c ${CONFIG} -w ${CKPT_PATH} -n ${CONFIG}-${MAX_LEN}-${EPOCH}-${CURRENT_DATETIME} -- --options data.train.max_len=${MAX_LEN} epoch=${EPOCH}"
 
 srun singularity run --nv -B /sdf,/fs,/sdf/scratch,/lscratch ${SINGULARITY_IMAGE_PATH} \

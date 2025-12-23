@@ -14,8 +14,6 @@ NUM_GPU=None
 NUM_MACHINE=1
 DIST_URL="auto"
 MODEL_DIR=""  # User may set this externally, otherwise empty by default
-# Always source ../.env to import environment variables
-. "$(dirname "$0")/../.env"
 
 while getopts "p:d:c:n:w:g:m:r:a:" opt; do
   case $opt in
@@ -84,8 +82,6 @@ else
   MODEL_LINK_DIR=""
 fi
 
-echo " =========> CREATE EXP DIR <========="
-echo "Experiment dir: $ROOT_DIR/$EXP_DIR"
 if [ "${RESUME}" = true ] && [ -d "$EXP_DIR" ]
 then
   CONFIG_DIR=${EXP_DIR}/config.py
@@ -93,8 +89,21 @@ then
 else
   RESUME=false
   mkdir -p "$CODE_DIR"
-  cp -r scripts tools larfm "$CODE_DIR"
-  cp .env "$CODE_DIR"
+  
+  # Determine if this is rank 0 (master process)
+  # Check SLURM_PROCID first (SLURM), then RANK (PyTorch), default to 0 if not set
+  RANK=${SLURM_PROCID:-${RANK:-0}}
+  
+  if [ "$RANK" = "0" ]; then
+    echo " =========> CREATE EXP DIR <========="
+    echo "Experiment dir: $ROOT_DIR/$EXP_DIR"
+    cp -r scripts tools pimm "$CODE_DIR"
+  else
+    # Other ranks wait for rank 0 to finish copying
+    while [ ! -d "$CODE_DIR/pimm" ] || [ ! -d "$CODE_DIR/scripts" ] || [ ! -d "$CODE_DIR/tools" ] || [ ! -f "$CODE_DIR/.env" ]; do
+      sleep 0.1
+    done
+  fi
   
   # Ensure physical checkpoint dir exists
   mkdir -p "$MODEL_SAVE_DIR"

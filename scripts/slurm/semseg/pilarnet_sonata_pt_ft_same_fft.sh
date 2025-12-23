@@ -58,7 +58,7 @@ elif [ $SLURM_ARRAY_TASK_ID -eq 5 ]; then
 fi
 CKPT_PATH="${CKPT_BASE_PATH}/${CKPT_EXP}/model/model_${WHICH}.pth"
 
-TRAIN_PATH=/sdf/home/y/youngsam/sw/dune/representations/lar.fm/scripts/train.sh
+TRAIN_PATH=/sdf/home/y/youngsam/sw/dune/representations/pimm/scripts/train.sh
 COMMAND="sh ${TRAIN_PATH} -m 1 -g 2 -d panda/semseg -c ${CONFIG} -w ${CKPT_PATH} -n ${CONFIG}-${MAX_LEN}-${EPOCH}-${CURRENT_DATETIME} -- --options data.train.max_len=${MAX_LEN} epoch=${EPOCH}"
 
 srun singularity run --nv -B /sdf,/fs,/sdf/scratch,/lscratch ${SINGULARITY_IMAGE_PATH} \

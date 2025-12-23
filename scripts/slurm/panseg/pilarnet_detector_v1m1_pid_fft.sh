@@ -19,9 +19,6 @@ SINGULARITY_IMAGE_PATH=/sdf/group/neutrino/images/develop.sif
 
 export NCCL_SOCKET_IFNAME=^docker0,lo  # Use any interface except docker and loopback
 
-export NCCL_DEBUG=INFO
-export NCCL_IB_DISABLE=0
-
 # Get current date and time in format YYYY-MM-DD_HH-MM
 CURRENT_DATETIME=$(date +"%Y-%m-%d_%H-%M-%S")
 # Set SSL certificates for Weights & Biases. This may not
@@ -52,7 +49,7 @@ elif [ $SLURM_ARRAY_TASK_ID -eq 5 ]; then
     EPOCH=20
 fi
 
-TRAIN_PATH=/sdf/home/y/youngsam/sw/dune/representations/lar.fm/scripts/train.sh
+TRAIN_PATH=/sdf/home/y/youngsam/sw/dune/representations/pimm/scripts/train.sh
 COMMAND="sh ${TRAIN_PATH} -m 2 -g 4 -d panda/panseg -c ${CONFIG} -w ${CKPT_PATH} -n ${CONFIG}-${MAX_LEN}-${EPOCH}-${CURRENT_DATETIME} -- --options data.train.max_len=${MAX_LEN} epoch=${EPOCH}"
 
 srun singularity run --nv -B /sdf,/fs,/sdf/scratch,/lscratch ${SINGULARITY_IMAGE_PATH} \

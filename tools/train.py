@@ -5,20 +5,20 @@ This script is designed to run as a native distributed process.
 It works seamlessly with SLURM (where Slurm launches tasks) or
 falls back to a single-process local run for debugging.
 
-Author: Modified from original larfm train.py
+Author: Modified from original pointcept train.py
 """
 
 import sys
 import os
 import logging
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from larfm.engines.defaults import (
+from pimm.engines.defaults import (
     default_argument_parser,
     default_config_parser,
     default_setup,
 )
-from larfm.engines.train import TRAINERS
-from larfm.utils import comm
+from pimm.engines.train import TRAINERS
+from pimm.utils import comm
 
 def main_worker(cfg):
     """Main worker function that runs the training."""

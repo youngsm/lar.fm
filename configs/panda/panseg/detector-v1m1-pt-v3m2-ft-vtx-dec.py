@@ -204,7 +204,18 @@ data = dict(
         max_len=1000,
         remove_low_energy_scatters=False,
     ),
-)
+    test=dict(
+        type="PILArNetH5Dataset",
+        revision="v2",
+        split="test",
+        # data_root="/path/to/pilarnet-m/",
+        transform=test_transform,
+        test_mode=False,
+        energy_threshold=0.13,
+        min_points=1024,
+        max_len=1000,
+        remove_low_energy_scatters=False,
+    ),)
 
 
 # hook
@@ -237,7 +248,7 @@ hooks = [
         mask_threshold=0.5,
         stuff_classes=[0],
         iou_thresh=0.5,
-        pid_class_names=[
+        class_names=[
             "thing",
         ],  # exclude led class
         require_class_for_match=False,
@@ -257,4 +268,12 @@ hooks = [
         log_per_layer=False,
         prefix="anneal",
     ),
+    dict(type="FinalEvaluator", test_last=True),
 ]
+
+test = dict(
+    type="InstanceSegTester",
+    class_names=data["names"][:-1],  # exclude led class
+    stuff_classes=[0],
+    require_class_for_match=False,
+)

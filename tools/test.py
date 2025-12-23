@@ -10,13 +10,13 @@ import os
 import logging
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from larfm.engines.defaults import (
+from pimm.engines.defaults import (
     default_argument_parser,
     default_config_parser,
     default_setup,
 )
-from larfm.engines.test import TESTERS
-from larfm.utils import comm
+from pimm.engines.test import TESTERS
+from pimm.utils import comm
 
 
 def main_worker(cfg):

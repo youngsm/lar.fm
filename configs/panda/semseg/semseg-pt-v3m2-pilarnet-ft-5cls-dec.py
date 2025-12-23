@@ -157,12 +157,23 @@ data = dict(
         revision="v1",
         split="val",
         # data_root="/path/to/pilarnet-m/",
-        transform=transform,
+        transform=test_transform,
         test_mode=False,
         energy_threshold=0.13,
         min_points=1024,
         max_len=1000,
         remove_low_energy_scatters=False,
+    ),
+    test=dict(
+        type="PILArNetH5Dataset",
+        revision="v1",
+        split="test",
+        # data_root="/path/to/pilarnet-m/",
+        transform=test_transform,
+        test_mode=True,
+        energy_threshold=0.13,
+        min_points=1024,
+        max_len=1000,
     ),
 )
 
@@ -193,5 +204,5 @@ hooks = [
     dict(type="InformationWriter"),
     dict(type="SemSegEvaluator", every_n_steps=1000, write_cls_iou=True),
     dict(type="CheckpointSaver", save_freq=None, evaluator_every_n_steps=1000),
-    # dict(type="PreciseEvaluator", test_last=False),
+    dict(type="PreciseEvaluator", test_last=False),
 ]

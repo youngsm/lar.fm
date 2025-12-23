@@ -12,7 +12,7 @@
 #SBATCH --array=1
 
 set -e
-. /sdf/home/y/youngsam/sw/dune/representations/lar.fm/.env
+. /sdf/home/y/youngsam/sw/dune/representations/pimm/.env
 export PYTHONFAULTHANDLER=1
 
 SINGULARITY_IMAGE_PATH=/sdf/group/neutrino/images/develop.sif
@@ -41,7 +41,7 @@ elif [ $SLURM_ARRAY_TASK_ID -eq 4 ]; then
 fi
 # do not include 1M becase that's in pilarnet_sonata_pt_ft_same_fft.sh
 
-TRAIN_PATH=/sdf/home/y/youngsam/sw/dune/representations/lar.fm/scripts/train.sh
+TRAIN_PATH=/sdf/home/y/youngsam/sw/dune/representations/pimm/scripts/train.sh
 COMMAND="sh ${TRAIN_PATH} -m 1 -g 4 -d panda/semseg -c ${CONFIG} -n ${CONFIG}-${CURRENT_DATETIME}-seed0 -w ${CKPT_PATH}"
 
 srun singularity run --nv -B /sdf,/fs,/sdf/scratch,/lscratch ${SINGULARITY_IMAGE_PATH} \
